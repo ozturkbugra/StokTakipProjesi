@@ -35,5 +35,31 @@ namespace StokTakip.API.Controllers
             var newProduct = await _service.AddAsync(product);
             return Ok(newProduct);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(Product product)
+        {
+            await _service.UpdateAsync(product);
+            return NoContent(); // 204: İşlem başarılı ama geriye veri dönmüyorum demek (Standarttır)
+        }
+
+        // SİLME (DELETE)
+        // Kullanımı: api/products/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remove(int id)
+        {
+            // Önce silinecek ürünü bulmamız lazım
+            var product = await _service.GetByIdAsync(id);
+
+            // Eğer ürün yoksa hata dön
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            // Varsa sil
+            await _service.RemoveAsync(product);
+            return NoContent();
+        }
     }
 }

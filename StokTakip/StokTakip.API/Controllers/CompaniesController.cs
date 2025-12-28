@@ -28,5 +28,26 @@ namespace StokTakip.API.Controllers
             var newCompany = await _service.AddAsync(company);
             return Ok(newCompany);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(Company company)
+        {
+            await _service.UpdateAsync(company);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remove(int id)
+        {
+            var company = await _service.GetByIdAsync(id);
+
+            if (company == null)
+            {
+                return NotFound();
+            }
+
+            await _service.RemoveAsync(company);
+            return NoContent();
+        }
     }
 }
