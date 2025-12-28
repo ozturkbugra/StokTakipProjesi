@@ -23,8 +23,9 @@ namespace StokTakip.API.Controllers
         [HttpGet]
         public async Task<IActionResult> All()
         {
-            var products = await _service.GetAllAsync();
-            return Ok(products); // 200 OK koduyla veriyi döner
+            // BURAYA DİKKAT: "x => x.Company" diyerek firmayı dahil et diyoruz.
+            var products = await _service.GetAllAsync(x => x.Company);
+            return Ok(products);
         }
 
         // POST: api/products

@@ -17,15 +17,19 @@ builder.Services.AddDbContext<AppDbContext>(x =>
     });
 });
 
-// 1. Generic Repository Tanýmý:
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
-// 2. Generic Service Tanýmý:
-builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
-
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+});
+
+
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+// Generic Service Tanýmý:
+builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

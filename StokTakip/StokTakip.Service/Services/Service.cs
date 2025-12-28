@@ -28,10 +28,23 @@ namespace StokTakip.Service.Services
             return entity;
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        // Include parametrelerini alacak şekilde güncelledik
+        public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
         {
-            // Listeye çevirip dönüyoruz
-            return await _repository.GetAll().ToListAsync();
+            // Önce ham sorguyu al (IQueryable)
+            IQueryable<T> query = _repository.GetAll();
+
+            // Eğer include istenmişse döngüyle hepsini ekle
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            // Listeye çevirip dön
+            return await query.ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(int id)

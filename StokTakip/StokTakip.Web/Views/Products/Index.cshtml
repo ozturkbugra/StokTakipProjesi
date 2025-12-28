@@ -1,0 +1,134 @@
+﻿
+@model ProductIndexViewModel
+
+@{
+    ViewData["Title"] = "Ürünler";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>📦 Ürün Listesi</h2>
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCreate">
+        + Yeni Ürün Ekle
+    </button>
+</div>
+
+<table class="table table-bordered table-hover shadow-sm bg-white">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Ürün Adı</th>
+            <th>Stok</th>
+            <th>Fiyat</th>
+            <th>Firma</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Products)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>
+                    <span class="badge @(item.Stock < 10 ? "bg-danger" : "bg-success")">
+                        @item.Stock
+                    </span>
+                </td>
+                <td>@item.Price.ToString("C2")</td>
+                <td>@(item.Company != null ? item.Company.Name : "-")</td>
+                <td>
+                    <button class="btn btn-warning btn-sm btn-edit"
+                            data-id="@item.Id"
+                            data-name="@item.Name"
+                            data-stock="@item.Stock"
+                            data-price="@item.Price"
+                            data-companyid="@item.CompanyId"
+                            data-bs-toggle="modal" data-bs-target="#modalUpdate">
+                        Düzenle
+                    </button>
+                    <a href="/Products/Delete/@item.Id" class="btn btn-danger btn-sm" onclick="return confirm('Silinsin mi?')">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="modalCreate" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">Yeni Ürün</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/Products/Create" method="post">
+                <div class="modal-body">
+                    <label>Ad</label> <input type="text" name="Name" class="form-control mb-2" required />
+                    <label>Fiyat</label> <input type="text" name="Price" class="form-control mb-2" required />
+                    <label>Stok</label> <input type="number" name="Stock" class="form-control mb-2" required />
+                    <label>Firma</label>
+                    <select name="CompanyId" class="form-select" required>
+                        <option value="">Seçiniz</option>
+                        @foreach (var c in Model.Companies)
+                        {
+                            <option value="@c.Id">@c.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalUpdate" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title">Ürün Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/Products/Update" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="Id" id="editId" />
+
+                    <label>Ad</label> <input type="text" name="Name" id="editName" class="form-control mb-2" required />
+                    <label>Fiyat</label> <input type="text" name="Price" id="editPrice" class="form-control mb-2" required />
+                    <label>Stok</label> <input type="number" name="Stock" id="editStock" class="form-control mb-2" required />
+                    <label>Firma</label>
+                    <select name="CompanyId" id="editCompanyId" class="form-select" required>
+                        <option value="">Seçiniz</option>
+                        @foreach (var c in Model.Companies)
+                        {
+                            <option value="@c.Id">@c.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-warning">Güncelle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $('.btn-edit').click(function () {
+            var id = $(this).data('id');
+            var name = $(this).data('name');
+            var price = $(this).data('price');
+            var stock = $(this).data('stock');
+            var companyId = $(this).data('companyid');
+
+            $('#editId').val(id);
+            $('#editName').val(name);
+            // Price bazen virgüllü gelir, input nokta isterse replace gerekebilir ama şimdilik deneyelim
+            $('#editPrice').val(price);
+            $('#editStock').val(stock);
+            $('#editCompanyId').val(companyId);
+        });
+    </script>
+}
