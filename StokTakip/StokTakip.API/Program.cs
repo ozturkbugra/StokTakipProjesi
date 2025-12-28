@@ -1,4 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using StokTakip.Repository;
+using System;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<AppDbContext>(x =>
+{
+    // 1. appsettings.json'dan adresi al
+    x.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"), options =>
+    {
+        // 2. Migration'lar Repository katmanýnda tutulacak de
+        options.MigrationsAssembly("StokTakip.Repository");
+    });
+});
 
 // Add services to the container.
 
