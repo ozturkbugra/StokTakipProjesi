@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="StokTakip.API/StokTakip.API.csproj" />
+  <Project Path="StokTakip.Core/StokTakip.Core.csproj" />
+  <Project Path="StokTakip.Repository/StokTakip.Repository.csproj" />
+  <Project Path="StokTakip.Service/StokTakip.Service.csproj" />
+  <Project Path="StokTakip.Web/StokTakip.Web.csproj" />
+</Solution>
