@@ -11,6 +11,6 @@ namespace StokTakip.Core
         // İLİŞKİ KISMI:
         // Bir firmanın sattığı birden fazla ürün olabilir.
         // O yüzden buraya bir "List" (Koleksiyon) koyuyoruz.
-        public ICollection<Product> Products { get; set; }
+        public ICollection<Product>? Products { get; set; }
     }
 }

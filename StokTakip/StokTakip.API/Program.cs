@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using StokTakip.Core.Interfaces;
 using StokTakip.Repository;
+using StokTakip.Repository.Repositories;
+using StokTakip.Service.Services;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +16,12 @@ builder.Services.AddDbContext<AppDbContext>(x =>
         options.MigrationsAssembly("StokTakip.Repository");
     });
 });
+
+// 1. Generic Repository Tanýmý:
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+// 2. Generic Service Tanýmý:
+builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
 
 // Add services to the container.
 

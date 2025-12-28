@@ -13,6 +13,6 @@
 
         // 2. Navigation Property (Gezinme Özelliği): 
         // Kod yazarken product.Company.Name diyebilmemizi sağlayan nesne.
-        public Company Company { get; set; }
+        public Company? Company { get; set; }
     }
 }
